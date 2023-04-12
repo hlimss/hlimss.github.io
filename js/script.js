@@ -1,21 +1,48 @@
-var names = new Array();
-names[0] = "Yaakov";
-names[1] = "John";
-names[2] = "Jen";
-names[3] = "jason";
-names[4] = "paul";
-names[5] = "frank";
-names[6] = "larry";
-names[7] = "paula";
-names[8] = "laura";
-names[9] = "jim";
+$(function () {
+
+  $(".navbar-toggle").blur(function (event) {
+    var screenwidth = window.innerwidth;
+    if (screenwidth < 768) {
+      console.log(screenwidth);
+      $("#collapsable-nav").collapse('hide');
+    }
+  });
+});
+
+(function (global) {
+
+  var dc = {};
+
+  var homeHtml = "snippets/home-snippet.html";
+
+  // Convenience function for inserting innerHTML for 'select'
+  var insertHtml = function (selector, html) {
+    var targetElem = document.querySelector(selector);
+    targetElem.innerHTML = html;
+  };
+
+  // Show loading icon inside element identified by 'selector'.
+  var showLoading = function (selector) {
+    var html = "<div class='text-center'>";
+    html += "<img src='images/ajax-loader.gif'></div>";
+    insertHtml(selector, html);
+  };
+
+  // On page load (before images or CSS)
+  document.addEventListener("DOMContentLoaded", function (event) {
+
+    // On first load, show home view
+    showLoading("#main-content");
+    $ajaxUtils.sendGetRequest(
+      homeHtml,
+      function (responseText) {
+        document.querySelector("#main-content")
+          .innerHTML = responseText;
+      },
+      false);
+  });
 
 
-for (var i = 0; i < names.length; i++) {
-    if (names[i].charAt(0) === 'J' || names[i].charAt(0) === 'j') {
-        console.log("Goodbye " + names[i])
-    }
-    else {
-        console.log("Hello " + names[i])
-    }
-}
+  global.$dc = dc;
+
+})(window);
